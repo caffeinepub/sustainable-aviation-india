@@ -35,7 +35,6 @@ const NAV_ITEMS = [
   { id: "home", label: "Home", icon: Home },
   { id: "comparison", label: "Aircraft Comparison", icon: Plane },
   { id: "mathematics", label: "Mathematics", icon: BarChart2 },
-  { id: "ih", label: "Integrated Humanities", icon: Globe },
   { id: "casestudy", label: "Case Study", icon: MapIcon },
   { id: "sustainability", label: "Sustainability", icon: Leaf },
   { id: "soi", label: "SOI Connection", icon: BookOpen },
@@ -127,7 +126,7 @@ function Sidebar({ active }: { active: string }) {
             IB MYP Grade 4
           </div>
           <div style={{ color: "oklch(0.52 0.01 240)" }}>
-            Integrated Humanities + Mathematics
+            Science + Mathematics
           </div>
         </div>
       </div>
@@ -169,7 +168,7 @@ function HeroSection() {
             Exploring how mathematics and engineering shape a greener future for
             India's rapidly growing aviation sector.
           </p>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
                 label: "Aviation Growth",
@@ -195,6 +194,20 @@ function HeroSection() {
                 <div className="text-xs opacity-60 mt-1">{sub}</div>
               </div>
             ))}
+            <div className="kpi-tile">
+              <div className="text-xs opacity-70 mb-1 uppercase tracking-wide">
+                Project Focus
+              </div>
+              <div className="text-lg font-bold leading-tight">MYP 4 IDU</div>
+              <div className="mt-2">
+                <Progress
+                  value={85}
+                  className="h-1.5"
+                  style={{ background: "oklch(1 0 0 / 20%)" }}
+                />
+                <div className="text-xs opacity-60 mt-1">85% complete</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -701,145 +714,6 @@ function IndiaMapSVG() {
         1,148 km
       </text>
     </svg>
-  );
-}
-
-// ─── Integrated Humanities ────────────────────────────────────────────────────
-function IntegratedHumanitiesSection() {
-  const topicCards = [
-    {
-      title: "Cultural & Social Impact",
-      body: "Aviation connects India's diverse regions, enabling cultural exchange, pilgrimages, and migration. Air travel democratises mobility — once reserved for elites, it now empowers millions to participate in national life.",
-      color: "#2F74B5",
-    },
-    {
-      title: "Economic Geography",
-      body: "Aviation reshapes urban-rural divides. Tier-2 cities gain access to global markets. The Delhi-Mumbai air corridor is one of the world's busiest, reflecting India's economic geography and rapid urbanisation.",
-      color: "#3A86C8",
-    },
-    {
-      title: "Environmental Justice",
-      body: "Communities near airports bear disproportionate noise and air pollution burdens. Sustainable aircraft like the A320neo reduce these impacts, connecting environmental science with social equity and policy.",
-      color: "#16A34A",
-    },
-  ];
-
-  const timeline = [
-    {
-      year: "1932",
-      event: "Tata Airlines founded",
-      note: "India's first commercial airline — colonial-era industrialisation",
-    },
-    {
-      year: "1953",
-      event: "Air India nationalised",
-      note: "State control reflecting post-independence socialism",
-    },
-    {
-      year: "1991",
-      event: "Liberalisation opens private aviation",
-      note: "Economic reforms reshape society and mobility",
-    },
-    {
-      year: "2003",
-      event: "Low-cost carriers emerge",
-      note: "Aviation becomes accessible to the middle class",
-    },
-    {
-      year: "2023",
-      event: "India: 3rd largest aviation market",
-      note: "Reflects rapid urbanisation and economic growth",
-    },
-  ];
-
-  return (
-    <section id="ih" className="mb-8">
-      <p className="section-title">Integrated Humanities</p>
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {topicCards.map(({ title, body, color }) => (
-          <div
-            key={title}
-            className="bg-card rounded-2xl p-5 border border-border card-hover"
-            style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
-          >
-            <div
-              className="w-8 h-1 rounded-full mb-3"
-              style={{ background: color }}
-            />
-            <div
-              className="text-xs font-bold uppercase tracking-wide mb-3"
-              style={{ color: "oklch(0.52 0.01 240)" }}
-            >
-              {title}
-            </div>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: "oklch(0.33 0.01 240)" }}
-            >
-              {body}
-            </p>
-          </div>
-        ))}
-      </div>
-      <div
-        className="bg-card rounded-2xl p-6 border border-border"
-        style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
-      >
-        <div className="mb-5">
-          <div
-            className="font-semibold text-sm"
-            style={{ color: "oklch(0.18 0.01 240)" }}
-          >
-            Historical Timeline — Indian Aviation
-          </div>
-          <div
-            className="text-xs mt-0.5"
-            style={{ color: "oklch(0.52 0.01 240)" }}
-          >
-            Key milestones through a humanities lens
-          </div>
-        </div>
-        <div className="relative pl-6">
-          <div
-            className="absolute left-2.5 top-0 bottom-0 w-0.5 rounded-full"
-            style={{ background: "oklch(0.23 0.07 240 / 20%)" }}
-          />
-          {timeline.map(({ year, event, note }, i) => (
-            <div
-              key={year}
-              className={`relative flex gap-4 ${i < timeline.length - 1 ? "mb-5" : ""}`}
-            >
-              <div
-                className="absolute -left-3.5 top-1 w-3 h-3 rounded-full border-2 border-white z-10"
-                style={{ background: i % 2 === 0 ? "#2F74B5" : "#16A34A" }}
-              />
-              <div className="flex-1">
-                <div className="flex items-baseline gap-3 mb-0.5">
-                  <span
-                    className="text-sm font-bold tabular-nums"
-                    style={{ color: i % 2 === 0 ? "#2F74B5" : "#16A34A" }}
-                  >
-                    {year}
-                  </span>
-                  <span
-                    className="text-sm font-semibold"
-                    style={{ color: "oklch(0.18 0.01 240)" }}
-                  >
-                    {event}
-                  </span>
-                </div>
-                <p
-                  className="text-xs"
-                  style={{ color: "oklch(0.52 0.01 240)" }}
-                >
-                  {note}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -1421,47 +1295,21 @@ function ConclusionSection() {
           style={{ color: "oklch(0.52 0.01 240)" }}
         >
           {[
-            {
-              text: "Airbus. (2024). A320neo Family — Aircraft Characteristics.",
-              url: "https://www.airbus.com/en/products-services/commercial-aircraft/the-a320-family/a320neo",
-            },
-            {
-              text: "Boeing. (2024). 737 MAX Technical Specifications.",
-              url: "https://www.boeing.com/commercial/737max",
-            },
-            {
-              text: "DGCA India. (2024). Annual Statistics — Domestic Air Traffic Report.",
-              url: "https://www.dgca.gov.in/digigov-portal/?page=statistics",
-            },
-            {
-              text: "IATA. (2024). Sustainable Aviation Fuel Outlook 2024.",
-              url: "https://www.iata.org/en/programs/environment/sustainable-aviation-fuels/",
-            },
-            {
-              text: "Ministry of Civil Aviation, India. (2024). National Air Connectivity Policy.",
-              url: "https://www.civilaviation.gov.in",
-            },
-            {
-              text: "ICAO. (2023). Environmental Protection — Carbon Offsetting and Reduction Scheme.",
-              url: "https://www.icao.int/environmental-protection/CORSIA/Pages/default.aspx",
-            },
-          ].map(({ text, url }, idx) => (
-            <div key={url} className="flex gap-2">
+            "Airbus. (2024). A320neo Family — Aircraft Characteristics. Airbus.com",
+            "Boeing. (2024). 737 MAX Technical Specifications. Boeing.com",
+            "DGCA India. (2024). Annual Statistics — Domestic Air Traffic Report. dgca.gov.in",
+            "IATA. (2024). Sustainable Aviation Fuel Outlook 2024. iata.org",
+            "Ministry of Civil Aviation, India. (2024). National Air Connectivity Policy. civilaviation.gov.in",
+            "ICAO. (2023). Environmental Protection — Carbon Offsetting and Reduction Scheme. icao.int",
+          ].map((ref, idx) => (
+            <div key={ref} className="flex gap-2">
               <span
                 className="font-mono font-bold"
                 style={{ color: "#2F74B5" }}
               >
                 [{idx + 1}]
               </span>
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-                style={{ color: "#2F74B5" }}
-              >
-                {text}
-              </a>
+              <span>{ref}</span>
             </div>
           ))}
         </div>
@@ -1515,12 +1363,25 @@ export default function App() {
           >
             Sustainable Aviation Dashboard
           </div>
+          <div className="flex items-center gap-2">
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
+              style={{ background: "oklch(0.23 0.07 240)" }}
+            >
+              M
+            </div>
+            <span
+              className="text-sm font-medium"
+              style={{ color: "oklch(0.33 0.01 240)" }}
+            >
+              Welcome, MYP 4 Student
+            </span>
+          </div>
         </header>
         <main className="flex-1 px-8 py-8">
           <HeroSection />
           <ComparisonSection />
           <MathematicsSection />
-          <IntegratedHumanitiesSection />
           <CaseStudySection />
           <SustainabilitySection />
           <SOISection />
