@@ -52,7 +52,7 @@ const CITIES: Record<
   BOM: { x: 128, y: 278, name: "Mumbai", iata: "BOM" },
   BLR: { x: 208, y: 382, name: "Bengaluru", iata: "BLR" },
   MAA: { x: 252, y: 374, name: "Chennai", iata: "MAA" },
-  CCU: { x: 318, y: 210, name: "Kolkata", iata: "CCU" },
+  CCU: { x: 390, y: 225, name: "Kolkata", iata: "CCU" },
   HYD: { x: 220, y: 316, name: "Hyderabad", iata: "HYD" },
 };
 
@@ -115,7 +115,6 @@ export function IndiaRouteMap() {
           style={{
             maxHeight: 480,
             objectFit: "contain",
-            /* Tint the white land area to a soft blue-grey */
             filter:
               "invert(1) sepia(1) saturate(2) hue-rotate(185deg) brightness(1.3) opacity(0.85)",
             mixBlendMode: "multiply",
@@ -237,23 +236,30 @@ export function IndiaRouteMap() {
                   stroke="white"
                   strokeWidth="2"
                 />
+                {/* City name with white stroke outline for legibility */}
                 <text
                   x={city.x + labelOffsetX}
                   y={city.y - 2}
-                  fontSize="9"
+                  fontSize="11"
                   fontWeight={isEndpoint ? "700" : "500"}
                   fill={isEndpoint ? "#1e293b" : "#334155"}
                   textAnchor={labelAnchor}
-                  style={{ textShadow: "0 0 3px white" }}
+                  stroke="white"
+                  strokeWidth="3"
+                  paintOrder="stroke"
                 >
                   {city.name}
                 </text>
+                {/* IATA code with white stroke outline for legibility */}
                 <text
                   x={city.x + labelOffsetX}
-                  y={city.y + 9}
-                  fontSize="7.5"
+                  y={city.y + 11}
+                  fontSize="9"
                   fill="#64748b"
                   textAnchor={labelAnchor}
+                  stroke="white"
+                  strokeWidth="3"
+                  paintOrder="stroke"
                 >
                   {city.iata}
                 </text>
