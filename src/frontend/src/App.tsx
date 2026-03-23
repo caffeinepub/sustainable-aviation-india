@@ -1,3 +1,4 @@
+import { IndiaRouteMap } from "@/components/IndiaRouteMap";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -634,75 +635,6 @@ function MathematicsSection() {
 }
 
 // ─── India Map SVG ────────────────────────────────────────────────────────────
-function IndiaMapSVG() {
-  return (
-    <svg
-      viewBox="0 0 220 280"
-      className="w-full"
-      style={{ maxHeight: 280 }}
-      role="img"
-      aria-labelledby="india-map-title"
-    >
-      <title id="india-map-title">
-        India map showing Delhi to Mumbai flight route
-      </title>
-      <path
-        d="M80,20 L95,15 L120,18 L140,22 L155,35 L165,50 L170,65 L168,80 L175,90 L180,105 L178,120 L172,135 L168,148 L158,158 L152,170 L148,182 L140,195 L130,205 L122,215 L115,225 L108,235 L102,245 L96,255 L90,262 L85,255 L80,245 L75,235 L70,225 L65,212 L58,200 L52,188 L48,175 L42,162 L38,148 L35,135 L32,120 L30,105 L35,90 L38,75 L40,60 L48,48 L58,35 L68,25 Z"
-        fill="#dbeafe"
-        stroke="#93c5fd"
-        strokeWidth="1.5"
-      />
-      <circle
-        cx="95"
-        cy="72"
-        r="5"
-        fill="#2F74B5"
-        stroke="white"
-        strokeWidth="2"
-      />
-      <text x="102" y="70" fontSize="9" fontWeight="700" fill="#111827">
-        Delhi
-      </text>
-      <text x="102" y="79" fontSize="7" fill="#6B7280">
-        DEL
-      </text>
-      <circle
-        cx="68"
-        cy="162"
-        r="5"
-        fill="#DC2626"
-        stroke="white"
-        strokeWidth="2"
-      />
-      <text x="76" y="160" fontSize="9" fontWeight="700" fill="#111827">
-        Mumbai
-      </text>
-      <text x="76" y="169" fontSize="7" fill="#6B7280">
-        BOM
-      </text>
-      <line
-        x1="95"
-        y1="77"
-        x2="68"
-        y2="157"
-        stroke="#2F74B5"
-        strokeWidth="2"
-        strokeDasharray="5,4"
-      />
-      <rect x="100" y="105" width="64" height="22" rx="5" fill="#2F74B5" />
-      <text
-        x="132"
-        y="120"
-        fontSize="9"
-        fontWeight="700"
-        fill="white"
-        textAnchor="middle"
-      >
-        1,148 km
-      </text>
-    </svg>
-  );
-}
 
 // ─── Integrated Humanities ────────────────────────────────────────────────────
 function IntegratedHumanitiesSection() {
@@ -863,9 +795,9 @@ function CaseStudySection() {
             className="text-xs mb-4"
             style={{ color: "oklch(0.52 0.01 240)" }}
           >
-            DEL ✈ BOM — Busiest domestic route in India
+            Select a route below to explore flight paths across India
           </div>
-          <IndiaMapSVG />
+          <IndiaRouteMap />
           <div className="grid grid-cols-3 gap-2 mt-4">
             {[
               { label: "Distance", value: "1,148 km" },
@@ -1162,13 +1094,19 @@ function SOISection() {
           boxShadow: "0 4px 20px oklch(0.23 0.07 240 / 25%)",
         }}
       >
+        <div
+          className="text-xs font-bold uppercase tracking-widest mb-1"
+          style={{ color: "oklch(0.85 0.08 60)" }}
+        >
+          Global Context: Personal and Cultural Expression
+        </div>
         <div className="text-xs font-bold uppercase tracking-widest mb-3 opacity-70">
           Statement of Inquiry
         </div>
         <blockquote className="text-xl font-semibold leading-relaxed italic opacity-95">
-          &ldquo;When we apply mathematical models to engineering choices, we
-          can make culturally informed decisions that promote environmental
-          sustainability.&rdquo;
+          &ldquo;Cultural perspectives should be considered when making
+          decisions about the relationship between the built and natural
+          environment.&rdquo;
         </blockquote>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-6">
