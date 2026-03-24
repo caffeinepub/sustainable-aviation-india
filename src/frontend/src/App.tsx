@@ -13,11 +13,13 @@ import {
   Home,
   Leaf,
   Map as MapIcon,
+  Menu,
   Plane,
   TrendingDown,
   Users,
   Volume2,
   Wind,
+  X,
   Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -68,109 +70,143 @@ function scrollTo(id: string) {
 }
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
-function Sidebar({ active }: { active: string }) {
+function Sidebar({
+  active,
+  isOpen,
+  onClose,
+}: {
+  active: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   return (
-    <aside
-      className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border flex flex-col z-40"
-      style={{ boxShadow: "2px 0 12px oklch(0.25 0.07 240 / 6%)" }}
-    >
-      <div className="p-6 border-b border-border">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{
-              background:
-                "linear-gradient(135deg, oklch(0.23 0.07 240), oklch(0.50 0.12 240))",
-            }}
-          >
-            <Plane className="w-5 h-5 text-white" />
-          </div>
-          <div>
+    <>
+      {/* Mobile overlay backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-30 md:hidden"
+          onClick={onClose}
+          onKeyDown={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={`fixed left-0 top-0 h-full w-64 bg-card border-r border-border flex flex-col z-40 transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+        style={{ boxShadow: "2px 0 12px oklch(0.25 0.07 240 / 6%)" }}
+      >
+        <div className="p-6 border-b border-border flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <div
-              className="font-bold text-lg leading-none"
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{
+                background:
+                  "linear-gradient(135deg, oklch(0.23 0.07 240), oklch(0.50 0.12 240))",
+              }}
+            >
+              <Plane className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <div
+                className="font-bold text-lg leading-none"
+                style={{ color: "oklch(0.23 0.07 240)" }}
+              >
+                SDIA
+              </div>
+              <div
+                className="text-xs mt-0.5"
+                style={{ color: "oklch(0.52 0.01 240)" }}
+              >
+                MYP 4 IDU Project
+              </div>
+            </div>
+          </div>
+          {/* Close button — mobile only */}
+          <button
+            type="button"
+            className="md:hidden p-1 rounded-lg hover:bg-muted transition-colors"
+            onClick={onClose}
+            aria-label="Close menu"
+          >
+            <X className="w-5 h-5" style={{ color: "oklch(0.52 0.01 240)" }} />
+          </button>
+        </div>
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              data-ocid={`nav.${id}.link`}
+              type="button"
+              onClick={() => {
+                scrollTo(id);
+                onClose();
+              }}
+              className={`nav-pill ${active === id ? "active" : ""}`}
+              style={active === id ? {} : { color: "oklch(0.33 0.01 240)" }}
+            >
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
+        <div className="p-4 border-t border-border">
+          <div
+            className="rounded-lg p-3 text-xs"
+            style={{ background: "oklch(0.23 0.07 240 / 6%)" }}
+          >
+            <div
+              className="font-semibold"
               style={{ color: "oklch(0.23 0.07 240)" }}
             >
-              SDIA
+              IB MYP Grade 4
             </div>
-            <div
-              className="text-xs mt-0.5"
-              style={{ color: "oklch(0.52 0.01 240)" }}
-            >
-              MYP 4 IDU Project
+            <div style={{ color: "oklch(0.52 0.01 240)" }}>
+              Integrated Humanities + Mathematics
             </div>
           </div>
         </div>
-      </div>
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            data-ocid={`nav.${id}.link`}
-            type="button"
-            onClick={() => scrollTo(id)}
-            className={`nav-pill ${active === id ? "active" : ""}`}
-            style={active === id ? {} : { color: "oklch(0.33 0.01 240)" }}
-          >
-            <Icon className="w-4 h-4 flex-shrink-0" />
-            <span>{label}</span>
-          </button>
-        ))}
-      </nav>
-      <div className="p-4 border-t border-border">
-        <div
-          className="rounded-lg p-3 text-xs"
-          style={{ background: "oklch(0.23 0.07 240 / 6%)" }}
-        >
-          <div
-            className="font-semibold"
-            style={{ color: "oklch(0.23 0.07 240)" }}
-          >
-            IB MYP Grade 4
-          </div>
-          <div style={{ color: "oklch(0.52 0.01 240)" }}>
-            Integrated Humanities + Mathematics
-          </div>
-        </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section id="home" className="mb-8">
+    <section id="home" className="mb-6 md:mb-8">
       <div
-        className="hero-gradient rounded-3xl p-8 text-white relative overflow-hidden"
-        style={{ minHeight: 260 }}
+        className="hero-gradient rounded-2xl md:rounded-3xl p-5 md:p-8 text-white relative overflow-hidden"
+        style={{ minHeight: 220 }}
       >
         <div
-          className="absolute right-8 top-4 opacity-10"
-          style={{ fontSize: 160, lineHeight: 1 }}
+          className="absolute right-4 md:right-8 top-4 opacity-10"
+          style={{ fontSize: 120, lineHeight: 1 }}
         >
           ✈
         </div>
         <div
-          className="absolute bottom-0 right-0 w-64 h-64 rounded-full opacity-5"
+          className="absolute bottom-0 right-0 w-48 md:w-64 h-48 md:h-64 rounded-full opacity-5"
           style={{ background: "white", transform: "translate(30%, 30%)" }}
         />
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-4">
-            <Plane className="w-5 h-5 opacity-80" />
-            <span className="text-sm font-medium opacity-80 tracking-wide uppercase">
+          <div className="flex items-center gap-2 mb-3 md:mb-4">
+            <Plane className="w-4 h-4 md:w-5 md:h-5 opacity-80" />
+            <span className="text-xs font-medium opacity-80 tracking-wide uppercase">
               MYP 4 Interdisciplinary Unit
             </span>
           </div>
-          <h1 className="text-3xl font-bold mb-2 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 leading-tight">
             Sustainable Domestic Aviation
             <br />
             in India
           </h1>
-          <p className="text-base opacity-75 max-w-xl mb-8">
+          <p className="text-sm md:text-base opacity-75 max-w-xl mb-5 md:mb-8">
             Exploring how mathematics and engineering shape a greener future for
             India's rapidly growing aviation sector.
           </p>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[
               {
                 label: "Aviation Growth",
@@ -185,14 +221,14 @@ function HeroSection() {
               {
                 label: "CO\u2082 per Flight",
                 value: "~45.2T",
-                sub: "Delhi–Mumbai (A320neo)",
+                sub: "Delhi\u2013Mumbai (A320neo)",
               },
             ].map(({ label, value, sub }) => (
               <div key={label} className="kpi-tile">
                 <div className="text-xs opacity-70 mb-1 uppercase tracking-wide">
                   {label}
                 </div>
-                <div className="text-2xl font-bold">{value}</div>
+                <div className="text-xl md:text-2xl font-bold">{value}</div>
                 <div className="text-xs opacity-60 mt-1">{sub}</div>
               </div>
             ))}
@@ -201,7 +237,7 @@ function HeroSection() {
       </div>
 
       {/* Aircraft Photo Showcase */}
-      <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mt-3 md:mt-4">
         <button
           type="button"
           className="relative rounded-2xl overflow-hidden group cursor-pointer text-left w-full"
@@ -212,11 +248,13 @@ function HeroSection() {
           <img
             src="/assets/generated/a320neo.dim_900x500.jpg"
             alt="Airbus A320neo in flight"
-            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-40 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <div className="text-white font-bold text-base">Airbus A320neo</div>
+          <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+            <div className="text-white font-bold text-sm md:text-base">
+              Airbus A320neo
+            </div>
             <div className="text-white/75 text-xs mt-0.5">
               CFM LEAP-1A · 165 seats · 6,300 km range
             </div>
@@ -243,11 +281,11 @@ function HeroSection() {
           <img
             src="/assets/generated/boeing737max8.dim_900x500.jpg"
             alt="Boeing 737 MAX 8 in flight"
-            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-40 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <div className="text-white font-bold text-base">
+          <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+            <div className="text-white font-bold text-sm md:text-base">
               Boeing 737 MAX 8
             </div>
             <div className="text-white/75 text-xs mt-0.5">
@@ -290,19 +328,19 @@ function AircraftCard({
 }: AircraftCardProps) {
   return (
     <div
-      className="bg-card rounded-2xl overflow-hidden card-hover border border-border flex-1"
+      className="bg-card rounded-2xl overflow-hidden card-hover border border-border w-full"
       style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
     >
       {/* Aircraft Photo */}
-      <div className="relative overflow-hidden" style={{ height: 200 }}>
+      <div className="relative overflow-hidden" style={{ height: 180 }}>
         <img
           src={image}
           alt={imageAlt}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
-          <h3 className="font-bold text-lg text-white">{name}</h3>
+        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 flex items-end justify-between">
+          <h3 className="font-bold text-base text-white">{name}</h3>
           {isEfficient && (
             <Badge
               className="text-xs font-semibold"
@@ -319,7 +357,7 @@ function AircraftCard({
       </div>
 
       {/* Specs */}
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <div className="space-y-0">
           {[
             { label: "Passenger Capacity", value: `${capacity} seats` },
@@ -331,13 +369,13 @@ function AircraftCard({
           ].map(({ label, value }) => (
             <div key={label} className="spec-row">
               <span
-                className="text-sm"
+                className="text-xs md:text-sm"
                 style={{ color: "oklch(0.52 0.01 240)" }}
               >
                 {label}
               </span>
               <span
-                className="text-sm font-semibold"
+                className="text-xs md:text-sm font-semibold"
                 style={{ color: "oklch(0.18 0.01 240)" }}
               >
                 {value}
@@ -391,11 +429,11 @@ function ComparisonSection() {
   ];
 
   return (
-    <section id="comparison" className="mb-8">
+    <section id="comparison" className="mb-6 md:mb-8">
       <p className="section-title">
         Aircraft Comparison — Efficiency &amp; Specs
       </p>
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <AircraftCard
           name="Airbus A320neo"
           image="/assets/generated/a320neo.dim_900x500.jpg"
@@ -428,65 +466,67 @@ function ComparisonSection() {
         style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
         data-ocid="comparison.table"
       >
-        <div
-          className="grid grid-cols-4 text-xs font-bold uppercase tracking-wider px-6 py-3"
-          style={{ background: "oklch(0.23 0.07 240)", color: "white" }}
-        >
-          <div>Metric</div>
-          <div className="text-center">A320neo</div>
-          <div className="text-center">737 MAX 8</div>
-          <div className="text-center">Winner</div>
-        </div>
-        {rows.map(({ metric, a320, b737, winner }, i) => (
+        <div className="overflow-x-auto">
           <div
-            key={metric}
-            className="grid grid-cols-4 px-6 py-3 border-b border-border text-sm"
-            style={{
-              background: i % 2 === 0 ? "white" : "oklch(0.969 0.008 240)",
-            }}
-            data-ocid={`comparison.row.${i + 1}`}
+            className="grid grid-cols-4 text-xs font-bold uppercase tracking-wider px-4 md:px-6 py-3 min-w-[480px]"
+            style={{ background: "oklch(0.23 0.07 240)", color: "white" }}
           >
+            <div>Metric</div>
+            <div className="text-center">A320neo</div>
+            <div className="text-center">737 MAX 8</div>
+            <div className="text-center">Winner</div>
+          </div>
+          {rows.map(({ metric, a320, b737, winner }, i) => (
             <div
-              className="font-medium"
-              style={{ color: "oklch(0.33 0.01 240)" }}
-            >
-              {metric}
-            </div>
-            <div
-              className="text-center font-semibold"
+              key={metric}
+              className="grid grid-cols-4 px-4 md:px-6 py-3 border-b border-border text-xs md:text-sm min-w-[480px]"
               style={{
-                color:
-                  winner === "a320"
-                    ? "oklch(0.35 0.14 145)"
-                    : "oklch(0.33 0.01 240)",
+                background: i % 2 === 0 ? "white" : "oklch(0.969 0.008 240)",
               }}
+              data-ocid={`comparison.row.${i + 1}`}
             >
-              {a320} {winner === "a320" && "✓"}
-            </div>
-            <div
-              className="text-center font-semibold"
-              style={{
-                color:
-                  winner === "b737"
-                    ? "oklch(0.35 0.14 145)"
-                    : "oklch(0.33 0.01 240)",
-              }}
-            >
-              {b737} {winner === "b737" && "✓"}
-            </div>
-            <div className="text-center">
-              <span
-                className="text-xs font-bold px-2 py-0.5 rounded-full"
+              <div
+                className="font-medium"
+                style={{ color: "oklch(0.33 0.01 240)" }}
+              >
+                {metric}
+              </div>
+              <div
+                className="text-center font-semibold"
                 style={{
-                  background: "oklch(0.53 0.15 145 / 15%)",
-                  color: "oklch(0.35 0.14 145)",
+                  color:
+                    winner === "a320"
+                      ? "oklch(0.35 0.14 145)"
+                      : "oklch(0.33 0.01 240)",
                 }}
               >
-                {winner === "a320" ? "A320neo" : "737 MAX 8"}
-              </span>
+                {a320} {winner === "a320" && "✓"}
+              </div>
+              <div
+                className="text-center font-semibold"
+                style={{
+                  color:
+                    winner === "b737"
+                      ? "oklch(0.35 0.14 145)"
+                      : "oklch(0.33 0.01 240)",
+                }}
+              >
+                {b737} {winner === "b737" && "✓"}
+              </div>
+              <div className="text-center">
+                <span
+                  className="text-xs font-bold px-2 py-0.5 rounded-full"
+                  style={{
+                    background: "oklch(0.53 0.15 145 / 15%)",
+                    color: "oklch(0.35 0.14 145)",
+                  }}
+                >
+                  {winner === "a320" ? "A320neo" : "737 MAX 8"}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -519,13 +559,13 @@ function MathematicsSection() {
   ];
 
   return (
-    <section id="mathematics" className="mb-8">
+    <section id="mathematics" className="mb-6 md:mb-8">
       <p className="section-title">Mathematical Analysis &amp; Data</p>
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         {formulaCards.map(({ title, formula, calc, result, color }) => (
           <div
             key={title}
-            className="bg-card rounded-2xl p-5 border border-border card-hover"
+            className="bg-card rounded-2xl p-4 md:p-5 border border-border card-hover"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div
@@ -555,7 +595,7 @@ function MathematicsSection() {
         ))}
       </div>
       <div
-        className="bg-card rounded-2xl p-6 border border-border mb-4"
+        className="bg-card rounded-2xl p-4 md:p-6 border border-border mb-4"
         style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
       >
         <div className="mb-4">
@@ -572,48 +612,55 @@ function MathematicsSection() {
             Liters used per flight — A320neo vs 737 MAX 8
           </div>
         </div>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={FUEL_CHART_DATA} barCategoryGap="30%" barGap={4}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#e5e7eb"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="route"
-              tick={{ fill: "#6B7280", fontSize: 12 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fill: "#6B7280", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(v: number) => `${(v / 1000).toFixed(1)}k`}
-              label={{
-                value: "Fuel (Liters)",
-                angle: -90,
-                position: "insideLeft",
-                offset: 10,
-                style: { fill: "#6B7280", fontSize: 11 },
-              }}
-            />
-            <Tooltip
-              formatter={(value: number) => [`${value.toLocaleString()} L`, ""]}
-              contentStyle={{
-                borderRadius: 8,
-                border: "1px solid #e5e7eb",
-                fontSize: 12,
-              }}
-            />
-            <Legend wrapperStyle={{ fontSize: 12, paddingTop: 16 }} />
-            <Bar dataKey="A320neo" fill="#2F74B5" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="737 MAX 8" fill="#3A86C8" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="overflow-x-auto">
+          <div style={{ minWidth: 280 }}>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={FUEL_CHART_DATA} barCategoryGap="30%" barGap={4}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e5e7eb"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="route"
+                  tick={{ fill: "#6B7280", fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fill: "#6B7280", fontSize: 10 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(v: number) => `${(v / 1000).toFixed(1)}k`}
+                  label={{
+                    value: "Fuel (L)",
+                    angle: -90,
+                    position: "insideLeft",
+                    offset: 10,
+                    style: { fill: "#6B7280", fontSize: 10 },
+                  }}
+                />
+                <Tooltip
+                  formatter={(value: number) => [
+                    `${value.toLocaleString()} L`,
+                    "",
+                  ]}
+                  contentStyle={{
+                    borderRadius: 8,
+                    border: "1px solid #e5e7eb",
+                    fontSize: 12,
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: 11, paddingTop: 12 }} />
+                <Bar dataKey="A320neo" fill="#2F74B5" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="737 MAX 8" fill="#3A86C8" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
       <div
-        className="rounded-2xl p-6 text-white flex items-center justify-between"
+        className="rounded-2xl p-4 md:p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
         style={{ background: "linear-gradient(135deg, #16A34A, #22C55E)" }}
         data-ocid="mathematics.success_state"
       >
@@ -621,20 +668,20 @@ function MathematicsSection() {
           <div className="text-sm font-medium opacity-80 mb-1">
             Efficiency Conclusion
           </div>
-          <div className="text-2xl font-bold">
+          <div className="text-xl md:text-2xl font-bold">
             A320neo is 9.35% More Efficient
           </div>
           <div className="text-sm opacity-75 mt-1">
             per passenger per kilometer than Boeing 737 MAX 8
           </div>
         </div>
-        <div className="text-6xl font-black opacity-20">9.35%</div>
+        <div className="text-5xl md:text-6xl font-black opacity-20 self-end sm:self-auto">
+          9.35%
+        </div>
       </div>
     </section>
   );
 }
-
-// ─── India Map SVG ────────────────────────────────────────────────────────────
 
 // ─── Integrated Humanities ────────────────────────────────────────────────────
 function IntegratedHumanitiesSection() {
@@ -685,13 +732,13 @@ function IntegratedHumanitiesSection() {
   ];
 
   return (
-    <section id="ih" className="mb-8">
+    <section id="ih" className="mb-6 md:mb-8">
       <p className="section-title">Integrated Humanities</p>
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         {topicCards.map(({ title, body, color }) => (
           <div
             key={title}
-            className="bg-card rounded-2xl p-5 border border-border card-hover"
+            className="bg-card rounded-2xl p-4 md:p-5 border border-border card-hover"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div
@@ -714,7 +761,7 @@ function IntegratedHumanitiesSection() {
         ))}
       </div>
       <div
-        className="bg-card rounded-2xl p-6 border border-border"
+        className="bg-card rounded-2xl p-4 md:p-6 border border-border"
         style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
       >
         <div className="mb-5">
@@ -746,7 +793,7 @@ function IntegratedHumanitiesSection() {
                 style={{ background: i % 2 === 0 ? "#2F74B5" : "#16A34A" }}
               />
               <div className="flex-1">
-                <div className="flex items-baseline gap-3 mb-0.5">
+                <div className="flex flex-wrap items-baseline gap-2 md:gap-3 mb-0.5">
                   <span
                     className="text-sm font-bold tabular-nums"
                     style={{ color: i % 2 === 0 ? "#2F74B5" : "#16A34A" }}
@@ -778,11 +825,11 @@ function IntegratedHumanitiesSection() {
 // ─── Case Study ───────────────────────────────────────────────────────────────
 function CaseStudySection() {
   return (
-    <section id="casestudy" className="mb-8">
+    <section id="casestudy" className="mb-6 md:mb-8">
       <p className="section-title">Case Study — Delhi to Mumbai Route</p>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div
-          className="bg-card rounded-2xl p-6 border border-border"
+          className="bg-card rounded-2xl p-4 md:p-6 border border-border"
           style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
         >
           <div
@@ -827,7 +874,7 @@ function CaseStudySection() {
         </div>
         <div className="space-y-4">
           <div
-            className="bg-card rounded-2xl p-6 border border-border"
+            className="bg-card rounded-2xl p-4 md:p-6 border border-border"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div
@@ -898,7 +945,7 @@ function CaseStudySection() {
             </div>
           </div>
           <div
-            className="bg-card rounded-2xl p-6 border border-border"
+            className="bg-card rounded-2xl p-4 md:p-6 border border-border"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div
@@ -972,13 +1019,13 @@ function SustainabilitySection() {
   ];
 
   return (
-    <section id="sustainability" className="mb-8">
+    <section id="sustainability" className="mb-6 md:mb-8">
       <p className="section-title">Sustainability &amp; Environmental Impact</p>
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
         {metrics.map(({ icon: Icon, title, a320, b737, note, color }) => (
           <div
             key={title}
-            className="bg-card rounded-2xl p-5 border border-border card-hover"
+            className="bg-card rounded-2xl p-4 md:p-5 border border-border card-hover"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div
@@ -988,7 +1035,7 @@ function SustainabilitySection() {
               <Icon className="w-4 h-4" style={{ color }} />
             </div>
             <div
-              className="font-bold text-sm mb-3"
+              className="font-bold text-xs md:text-sm mb-3"
               style={{ color: "oklch(0.18 0.01 240)" }}
             >
               {title}
@@ -1028,7 +1075,7 @@ function SustainabilitySection() {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {[
           {
             icon: TrendingDown,
@@ -1051,12 +1098,12 @@ function SustainabilitySection() {
         ].map(({ icon: Icon, title, body, color }) => (
           <div
             key={title}
-            className="bg-card rounded-2xl p-5 border border-border card-hover"
+            className="bg-card rounded-2xl p-4 md:p-5 border border-border card-hover"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div className="flex items-center gap-2 mb-3">
               <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                 style={{ background: `${color}18` }}
               >
                 <Icon className="w-4 h-4" style={{ color }} />
@@ -1084,10 +1131,10 @@ function SustainabilitySection() {
 // ─── SOI Connection ────────────────────────────────────────────────────────────
 function SOISection() {
   return (
-    <section id="soi" className="mb-8">
+    <section id="soi" className="mb-6 md:mb-8">
       <p className="section-title">SOI Connection</p>
       <div
-        className="rounded-2xl p-6 mb-6 text-white"
+        className="rounded-2xl p-4 md:p-6 mb-6 text-white"
         style={{
           background:
             "linear-gradient(135deg, oklch(0.23 0.07 240), oklch(0.33 0.085 240))",
@@ -1103,13 +1150,13 @@ function SOISection() {
         <div className="text-xs font-bold uppercase tracking-widest mb-3 opacity-70">
           Statement of Inquiry
         </div>
-        <blockquote className="text-xl font-semibold leading-relaxed italic opacity-95">
+        <blockquote className="text-base md:text-xl font-semibold leading-relaxed italic opacity-95">
           &ldquo;Cultural perspectives should be considered when making
           decisions about the relationship between the built and natural
           environment.&rdquo;
         </blockquote>
       </div>
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         {[
           {
             num: "01",
@@ -1128,7 +1175,7 @@ function SOISection() {
         ].map(({ num, title, content, color }) => (
           <div
             key={num}
-            className="bg-card rounded-2xl p-6 border border-border"
+            className="bg-card rounded-2xl p-4 md:p-6 border border-border"
             style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
           >
             <div className="flex items-center gap-3 mb-4">
@@ -1155,7 +1202,7 @@ function SOISection() {
         ))}
       </div>
       <div
-        className="bg-card rounded-2xl p-6 border border-border"
+        className="bg-card rounded-2xl p-4 md:p-6 border border-border"
         style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
       >
         <div
@@ -1164,7 +1211,7 @@ function SOISection() {
         >
           IB Learner Profile Attributes
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
           {[
             {
               label: "Thinker",
@@ -1239,13 +1286,13 @@ function ConclusionSection() {
   ];
 
   return (
-    <section id="conclusion" className="mb-8">
+    <section id="conclusion" className="mb-6 md:mb-8">
       <p className="section-title">Conclusion</p>
       {/* Side-by-side photo comparison in conclusion */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div
           className="relative rounded-2xl overflow-hidden"
-          style={{ height: 160 }}
+          style={{ height: 150 }}
         >
           <img
             src="/assets/generated/a320neo.dim_900x500.jpg"
@@ -1253,13 +1300,13 @@ function ConclusionSection() {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
-          <div className="absolute inset-0 flex items-center p-5">
+          <div className="absolute inset-0 flex items-center p-4 md:p-5">
             <div className="text-white">
               <div className="text-xs font-bold uppercase tracking-widest opacity-75 mb-1">
                 Winner
               </div>
-              <div className="text-xl font-bold">Airbus A320neo</div>
-              <div className="text-sm opacity-80 mt-0.5">
+              <div className="text-lg md:text-xl font-bold">Airbus A320neo</div>
+              <div className="text-xs md:text-sm opacity-80 mt-0.5">
                 9.35% more efficient
               </div>
             </div>
@@ -1273,7 +1320,7 @@ function ConclusionSection() {
         </div>
         <div
           className="relative rounded-2xl overflow-hidden"
-          style={{ height: 160 }}
+          style={{ height: 150 }}
         >
           <img
             src="/assets/generated/boeing737max8.dim_900x500.jpg"
@@ -1281,34 +1328,38 @@ function ConclusionSection() {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
-          <div className="absolute inset-0 flex items-center p-5">
+          <div className="absolute inset-0 flex items-center p-4 md:p-5">
             <div className="text-white">
               <div className="text-xs font-bold uppercase tracking-widest opacity-75 mb-1">
                 Runner-up
               </div>
-              <div className="text-xl font-bold">Boeing 737 MAX 8</div>
-              <div className="text-sm opacity-80 mt-0.5">1.605 L/pax/km</div>
+              <div className="text-lg md:text-xl font-bold">
+                Boeing 737 MAX 8
+              </div>
+              <div className="text-xs md:text-sm opacity-80 mt-0.5">
+                1.605 L/pax/km
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div
-        className="rounded-2xl p-6 mb-6"
+        className="rounded-2xl p-4 md:p-6 mb-6"
         style={{
           background: "linear-gradient(135deg, #16A34A, #22C55E)",
           boxShadow: "0 4px 20px rgba(22, 163, 74, 0.25)",
         }}
       >
-        <div className="flex items-center gap-4">
-          <div className="text-6xl">✈️</div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+          <div className="text-5xl md:text-6xl">✈️</div>
           <div className="text-white">
             <div className="text-xs font-bold uppercase tracking-widest opacity-75 mb-1">
               Final Recommendation
             </div>
-            <div className="text-2xl font-bold mb-1">
+            <div className="text-xl md:text-2xl font-bold mb-1">
               Airbus A320neo — The Clear Choice
             </div>
-            <div className="opacity-85">
+            <div className="text-sm opacity-85">
               9.35% more efficient per passenger · Lower emissions · Quieter
               operations
             </div>
@@ -1316,7 +1367,7 @@ function ConclusionSection() {
         </div>
       </div>
       <div
-        className="bg-card rounded-2xl p-6 border border-border mb-6"
+        className="bg-card rounded-2xl p-4 md:p-6 border border-border mb-6"
         style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
       >
         <div
@@ -1345,7 +1396,7 @@ function ConclusionSection() {
         </div>
       </div>
       <div
-        className="bg-card rounded-2xl p-6 border border-border"
+        className="bg-card rounded-2xl p-4 md:p-6 border border-border"
         style={{ boxShadow: "0 2px 8px oklch(0.25 0.07 240 / 8%)" }}
       >
         <div
@@ -1386,7 +1437,7 @@ function ConclusionSection() {
           ].map(({ text, url }, idx) => (
             <div key={url} className="flex gap-2">
               <span
-                className="font-mono font-bold"
+                className="font-mono font-bold flex-shrink-0"
                 style={{ color: "#2F74B5" }}
               >
                 [{idx + 1}]
@@ -1395,7 +1446,7 @@ function ConclusionSection() {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline"
+                className="hover:underline break-words min-w-0"
                 style={{ color: "#2F74B5" }}
               >
                 {text}
@@ -1411,6 +1462,7 @@ function ConclusionSection() {
 // ─── App Root ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const sections = NAV_ITEMS.map(({ id }) =>
@@ -1433,28 +1485,73 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Close sidebar on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setSidebarOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div
       className="flex min-h-screen"
       style={{ background: "oklch(0.969 0.008 240)" }}
     >
-      <Sidebar active={activeSection} />
-      <div className="ml-64 flex-1 flex flex-col min-w-0">
+      <Sidebar
+        active={activeSection}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <div className="md:ml-64 flex-1 flex flex-col min-w-0">
         <header
-          className="sticky top-0 z-30 flex items-center justify-between px-8 py-4 border-b border-border"
+          className="sticky top-0 z-30 flex items-center justify-between px-4 md:px-8 py-3 md:py-4 border-b border-border"
           style={{
             background: "oklch(0.969 0.008 240 / 90%)",
             backdropFilter: "blur(12px)",
           }}
         >
+          {/* Hamburger — mobile only */}
+          <button
+            type="button"
+            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open navigation menu"
+            data-ocid="nav.open_modal_button"
+          >
+            <Menu
+              className="w-5 h-5"
+              style={{ color: "oklch(0.33 0.01 240)" }}
+            />
+          </button>
           <div
-            className="text-xs font-bold uppercase tracking-widest"
+            className="text-xs font-bold uppercase tracking-widest hidden md:block"
             style={{ color: "oklch(0.52 0.01 240)" }}
           >
             Sustainable Aviation Dashboard
           </div>
+          {/* Mobile title */}
+          <div
+            className="text-xs font-bold uppercase tracking-widest md:hidden"
+            style={{ color: "oklch(0.52 0.01 240)" }}
+          >
+            SDIA
+          </div>
+          {/* Bottom labels — shown in header on mobile */}
+          <div className="flex items-center gap-2">
+            <span
+              className="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 rounded-full"
+              style={{
+                background: "oklch(0.23 0.07 240 / 10%)",
+                color: "oklch(0.33 0.07 240)",
+              }}
+            >
+              Integrated Humanities + Mathematics
+            </span>
+          </div>
         </header>
-        <main className="flex-1 px-8 py-8">
+        <main className="flex-1 px-4 md:px-8 py-4 md:py-8">
           <HeroSection />
           <ComparisonSection />
           <MathematicsSection />
@@ -1464,12 +1561,12 @@ export default function App() {
           <SOISection />
           <ConclusionSection />
           <footer
-            className="mt-8 rounded-2xl overflow-hidden"
+            className="mt-6 md:mt-8 rounded-2xl overflow-hidden"
             style={{ background: "oklch(0.23 0.07 240)", color: "white" }}
           >
             {/* MYP-4 IDU Banner */}
             <div
-              className="px-6 py-3 flex items-center gap-3"
+              className="px-4 md:px-6 py-3 flex flex-wrap items-center gap-2 md:gap-3"
               style={{ background: "oklch(0.18 0.09 240)" }}
             >
               <span
@@ -1484,12 +1581,12 @@ export default function App() {
               >
                 IDU
               </span>
-              <span className="text-xs opacity-70 ml-1">
+              <span className="text-xs opacity-70">
                 IB Middle Years Programme · Grade 4 Interdisciplinary Unit
               </span>
             </div>
 
-            <div className="p-6 grid grid-cols-3 gap-6">
+            <div className="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
               <div>
                 <div className="font-bold text-sm mb-2">Project Info</div>
                 <div className="text-xs opacity-70 space-y-1">
@@ -1507,14 +1604,14 @@ export default function App() {
                   <div>Academic Year 2025–26</div>
                 </div>
               </div>
-              <div>
+              <div className="sm:col-span-2 md:col-span-1">
                 <div className="font-bold text-sm mb-2">Sections</div>
-                <div className="text-xs opacity-70 space-y-1">
+                <div className="text-xs opacity-70 grid grid-cols-2 gap-x-4 gap-y-1">
                   {NAV_ITEMS.slice(1).map(({ id, label }) => (
                     <button
                       key={id}
                       type="button"
-                      className="cursor-pointer hover:opacity-100 transition-opacity text-left w-full"
+                      className="cursor-pointer hover:opacity-100 transition-opacity text-left"
                       onClick={() => scrollTo(id)}
                     >
                       → {label}
@@ -1525,18 +1622,18 @@ export default function App() {
 
               {/* Made By Credits */}
               <div
-                className="col-span-3 rounded-xl p-4 text-center"
+                className="col-span-1 sm:col-span-2 md:col-span-3 rounded-xl p-4 text-center"
                 style={{ background: "oklch(0.28 0.07 240)" }}
               >
                 <div className="text-xs opacity-60 uppercase tracking-widest mb-2">
                   Made by
                 </div>
-                <div className="flex items-center justify-center gap-6 flex-wrap">
+                <div className="flex items-center justify-center gap-4 md:gap-6 flex-wrap">
                   {["Ansh Mehta", "Anirudh Gautam", "Moulik Maji"].map(
                     (name) => (
                       <div key={name} className="flex items-center gap-2">
                         <div
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+                          className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
                           style={{ background: "#2F74B5" }}
                         >
                           {name[0]}
@@ -1551,7 +1648,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="col-span-3 border-t border-white/20 pt-4 flex items-center justify-between text-xs opacity-60">
+              <div className="col-span-1 sm:col-span-2 md:col-span-3 border-t border-white/20 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs opacity-60">
                 <span>
                   © {new Date().getFullYear()} MYP-4 IDU Project. Built with{" "}
                   <a
@@ -1563,7 +1660,7 @@ export default function App() {
                     caffeine.ai
                   </a>
                 </span>
-                <span>
+                <span className="hidden sm:block">
                   Sustainable Aviation in India — A320neo vs 737 MAX 8
                 </span>
               </div>

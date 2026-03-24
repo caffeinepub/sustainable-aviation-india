@@ -83,14 +83,14 @@ export function IndiaRouteMap() {
 
   return (
     <div className="w-full">
-      {/* Route selector */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      {/* Route selector — scrollable on mobile */}
+      <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4">
         {ROUTES.map((route) => (
           <button
             type="button"
             key={route.id}
             onClick={() => setSelectedRoute(route.id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${
+            className={`px-2.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${
               selectedRoute === route.id
                 ? "border-transparent text-white shadow-md"
                 : "border-border text-muted-foreground hover:border-blue-300 bg-card"
@@ -113,7 +113,7 @@ export function IndiaRouteMap() {
           alt="India map outline"
           className="w-full block"
           style={{
-            maxHeight: 480,
+            maxHeight: 400,
             objectFit: "contain",
             filter:
               "invert(1) sepia(1) saturate(2) hue-rotate(185deg) brightness(1.3) opacity(0.85)",
@@ -209,6 +209,9 @@ export function IndiaRouteMap() {
                 key={code}
                 onMouseEnter={() => setHoveredCity(code)}
                 onMouseLeave={() => setHoveredCity(null)}
+                onTouchStart={() =>
+                  setHoveredCity(hoveredCity === code ? null : code)
+                }
                 style={{ cursor: "pointer", pointerEvents: "all" }}
               >
                 {isEndpoint && (
@@ -225,7 +228,7 @@ export function IndiaRouteMap() {
                 <circle
                   cx={city.x}
                   cy={city.y}
-                  r={isEndpoint ? 6 : 4}
+                  r={isEndpoint ? 7 : 5}
                   fill={
                     code === activeRoute.from
                       ? "#2F74B5"
@@ -338,15 +341,15 @@ export function IndiaRouteMap() {
 
       {/* Route stats card */}
       <div
-        className="mt-3 rounded-xl p-4 border"
+        className="mt-3 rounded-xl p-3 md:p-4 border"
         style={{
           background: "oklch(0.23 0.07 240 / 6%)",
           borderColor: "#93c5fd",
         }}
       >
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
+        <div className="flex flex-col sm:flex-row items-start gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5 mb-1">
               <span className="text-xs font-bold" style={{ color: "#2F74B5" }}>
                 {activeRoute.label}
               </span>
@@ -367,7 +370,7 @@ export function IndiaRouteMap() {
               {activeRoute.note}
             </p>
           </div>
-          <div className="shrink-0 text-right">
+          <div className="shrink-0">
             <div className="text-xs font-semibold" style={{ color: "#166534" }}>
               A320neo ✓
             </div>
